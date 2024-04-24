@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8"> 
+    <title>Photo Party</title> 
+    <style>
+        .image-container {
+            display: flex; 
+            flex-wrap: wrap; 
+            gap: 0px;      
+        }
+
+        .image-container img {
+            width: 150px;  
+            height: 150px;  
+            object-fit: cover; 
+            margin: 0;     
+        }
+    </style>
+    <script>
+        const images = [];
+        const n = 29; 
+        for (let i = 1; i <= n; i++) {
+            images.push(`images/${i}.jpg`);
+        }
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]]; 
+            }
+        }
+
+        function calculateInitialImages() {
+            const screenWidth = window.innerWidth; 
+            const screenHeight = window.innerHeight; 
+            const imgWidth = 150; 
+            const imgHeight = 150; 
+            const cols = Math.ceil(screenWidth / imgWidth);
+            const rows = Math.ceil(screenHeight / imgHeight);
+            return cols * rows + 20;
+        }
+
+        function appendImages(container, count) {
+            shuffleArray(images); 
+            for (let i = 0; i < count; i++) { 
+                const imgElement = document.createElement('img');
+                imgElement.src = images[Math.floor(Math.random() * images.length)]; 
+                container.appendChild(imgElement); 
+            }
+        }
+
+        window.onload = function() {
+            const container = document.getElementById('image-container'); 
+            const initialCount = calculateInitialImages(); 
+            appendImages(container, initialCount); 
+
+            window.addEventListener('scroll', function() {
+                if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
+                    appendImages(container, 20);
+                }
+            });
+        };
+    </script>
+</head>
+<body>
+    <div class="image-container" id="image-container">
+    </div>
+</body>
+</html>
